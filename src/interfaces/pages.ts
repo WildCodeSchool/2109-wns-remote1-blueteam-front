@@ -1,3 +1,3 @@
 export default interface IPage {
-  name?: string;
+  element?: string;
 }

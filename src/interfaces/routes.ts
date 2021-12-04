@@ -1,6 +1,6 @@
+import { FC } from 'react';
+
 export default interface IRoute {
   path: string;
-  name: string;
-  component: any;
-  exact: boolean;
+  element: FC;
 }
