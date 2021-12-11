@@ -3,8 +3,10 @@ import Navbar from '../navbar/Navbar';
 
 const Layout: FC = ({ children }) => (
   <>
-    <Navbar />
-    <p>{children}</p>
+    <div style={{ display: 'flex' }}>
+      <Navbar />
+      <p>{children}</p>
+    </div>
   </>
 );
 
