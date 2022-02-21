@@ -3,9 +3,9 @@ import Navbar from '../navbar/Navbar';
 
 const Layout: FC = ({ children }) => (
   <>
-    <div style={{ display: 'flex' }}>
+    <div>
       <Navbar />
-      <p>{children}</p>
+      <div>{children}</div>
     </div>
   </>
 );
