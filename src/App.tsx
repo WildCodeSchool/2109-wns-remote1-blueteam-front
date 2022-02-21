@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import './App.css';
-import Router from './components/routes/Router';
+import Router from './routes/Router';
 
 const App: FC = () => (
   <>
