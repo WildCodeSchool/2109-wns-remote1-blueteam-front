@@ -6,14 +6,12 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
-import Dashboard from "../dashboard/Dashboard";
 
 type Anchor = 'left';
 
 const routes: { path: string; name: string; icon: JSX.Element; id: string }[] = [
     {path:'/',name:'Home',icon: <ContentCut fontSize="small" />,id:"1"},
-    {path:'/dashboard',name:'Dashboard',icon: <ContentCopy fontSize="small" />,id:"2"},
-    {path:'/myfirstpage',name:'My First Page',icon: <ContentPaste fontSize="small" />,id:"3"},
+    {path:'/taskDetails',name:'Task Details',icon: <ContentCut fontSize="small" />,id:"2"},
     {path:'/logout',name:'Logout', icon: <LoginTwoTone fontSize="small" />,id:"4"}];
 
 
