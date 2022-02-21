@@ -14,16 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IPage from "../../interfaces/pages";
 import logo from "../../assets/images/blue_logo.png";
-
-const Copyright = (props: any) => (
-    <Typography variant="body2" color="text.secondary" align="center">
-        {'Copyright © '}
-        <Link color="inherit" href="https://mui.com/">
-            BlueTeam Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-    </Typography>
-);
+import Copyright from '../../components/copyright/Copyright'
 
 const theme = createTheme();
 

@@ -12,19 +12,10 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IPage from '../../interfaces/pages';
 import logo from '../../assets/images/blue_logo.png';
-
+import Copyright from '../../components/copyright/Copyright'
 
 const theme = createTheme();
 
-const Copyright = (props: any) => (
-    <Typography component="span" variant="body2" color="text.secondary" align="center">
-        {'Copyright © '}
-        <Link color="inherit" href="https://mui.com/">
-            BlueTeam Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-    </Typography>
-);
 
 const SignIn = (props: IPage) => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
