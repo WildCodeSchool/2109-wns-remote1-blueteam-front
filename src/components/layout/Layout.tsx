@@ -4,8 +4,9 @@ import Navbar from '../navbar/Navbar';
 const Layout: FC = ({ children }) => (
   <>
     <div>
-      <Navbar />
-      <div>{children}</div>
+      <Navbar>
+        {children}
+      </Navbar>
     </div>
   </>
 );
