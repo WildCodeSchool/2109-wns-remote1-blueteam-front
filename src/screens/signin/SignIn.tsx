@@ -11,9 +11,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import IPage from '../../interfaces/pages';
 import logo from '../../assets/images/blue_logo.png';
 import Copyright from '../../components/copyright/Copyright';
+import IPage from '../../interfaces/pages';
 import { IUserLogin } from '../../interfaces/users';
 
 const theme = createTheme();
