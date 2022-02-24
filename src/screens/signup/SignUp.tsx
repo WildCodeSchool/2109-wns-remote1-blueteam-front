@@ -104,6 +104,16 @@ const SignUp = (props: IPage) => {
                 <TextField
                   required
                   fullWidth
+                  id="job"
+                  label="Your Job"
+                  name="job"
+                  autoComplete="job"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
                   name="password"
                   label="Password"
                   type="password"
