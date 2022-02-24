@@ -34,14 +34,12 @@ const SignUp = (props: IPage) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-
     const newUser = {
-      firstname: data.get('firstName') as string || '',
-      lastname: data.get('lastName') as string || '',
-      email: data.get('email') as string || '',
-      password: data.get('password') as string || '',
-      job: "myjob",
+      firstname: (data.get('firstName') as string) || '',
+      lastname: (data.get('lastName') as string) || '',
+      email: (data.get('email') as string) || '',
+      job: (data.get('job') as string) || '',
+      password: (data.get('password') as string) || '',
     };
 
     register({ variables: { data: newUser } });
