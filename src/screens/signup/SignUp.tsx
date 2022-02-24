@@ -1,17 +1,11 @@
 import * as React from 'react';
-
 import { gql, useMutation } from '@apollo/client';
-
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -32,7 +26,7 @@ const REGISTER = gql`
 `;
 
 const SignUp = (props: IPage) => {
-  const [register, { error, data }] = useMutation<
+  const [register] = useMutation<
     { register: { _id: string } }, // server answer
     { data: IUserRegister } // data sent to server
   >(REGISTER);
@@ -40,14 +34,12 @@ const SignUp = (props: IPage) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-
     const newUser = {
-      firstname: data.get('firstName') as string || '',
-      lastname: data.get('lastName') as string || '',
-      email: data.get('email') as string || '',
-      password: data.get('password') as string || '',
-      job: "myjob",
+      firstname: (data.get('firstName') as string) || '',
+      lastname: (data.get('lastName') as string) || '',
+      email: (data.get('email') as string) || '',
+      job: (data.get('job') as string) || '',
+      password: (data.get('password') as string) || '',
     };
 
     register({ variables: { data: newUser } });
@@ -73,7 +65,7 @@ const SignUp = (props: IPage) => {
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -85,7 +77,7 @@ const SignUp = (props: IPage) => {
                   autoComplete="given-name"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -104,6 +96,16 @@ const SignUp = (props: IPage) => {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="job"
+                  label="Your Job"
+                  name="job"
+                  autoComplete="job"
                 />
               </Grid>
               <Grid item xs={12}>
