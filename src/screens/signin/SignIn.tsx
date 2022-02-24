@@ -1,4 +1,5 @@
 import React from 'react';
+import { gql, useLazyQuery } from "@apollo/client";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -13,18 +14,32 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IPage from '../../interfaces/pages';
 import logo from '../../assets/images/blue_logo.png';
 import Copyright from '../../components/copyright/Copyright';
+import { IUserLogin } from '../../interfaces/users';
 
 const theme = createTheme();
 
+const LOGIN = gql`
+  query Login($data: LoginInput!) {
+    login(data: $data) {
+      id
+    }
+  }
+`;
+
 const SignIn = (props: IPage) => {
+  const [login] = useLazyQuery<
+  { login: { _id: string } },
+  { data: IUserLogin }
+  >(LOGIN);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const UserLogin = {
+      email: data.get('email') as string || '',
+      password: data.get('password') as string || '',
+    }
+    login({ variables: { data: UserLogin } });
   };
 
   return (

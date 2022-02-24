@@ -12,8 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IPage from '../../interfaces/pages';
 import logo from '../../assets/images/blue_logo.png';
 import Copyright from '../../components/copyright/Copyright';
-
-import IUserRegister from '../../interfaces/users';
+import { IUserRegister } from '../../interfaces/users';
 
 const theme = createTheme();
 
