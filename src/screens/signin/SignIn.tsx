@@ -1,5 +1,5 @@
 import React from 'react';
-import { gql, useLazyQuery } from "@apollo/client";
+import { gql, useLazyQuery } from '@apollo/client';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -28,17 +28,17 @@ const LOGIN = gql`
 
 const SignIn = (props: IPage) => {
   const [login] = useLazyQuery<
-  { login: { _id: string } },
-  { data: IUserLogin }
+    { login: { _id: string } },
+    { data: IUserLogin }
   >(LOGIN);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const UserLogin = {
-      email: data.get('email') as string || '',
-      password: data.get('password') as string || '',
-    }
+      email: (data.get('email') as string) || '',
+      password: (data.get('password') as string) || '',
+    };
     login({ variables: { data: UserLogin } });
   };
 
