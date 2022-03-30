@@ -8,8 +8,6 @@ import Dialog from '@mui/material/Dialog';
 import { Typography } from '@mui/material';
 import { DialogPopup } from '../../interfaces/dialog';
 
-const emails = ['Project 1', 'Project 2'];
-
 function DialogPopupTasks(props: DialogPopup) {
   const { onClose, selectedValue, open } = props;
 
@@ -17,30 +15,26 @@ function DialogPopupTasks(props: DialogPopup) {
     onClose(selectedValue);
   };
 
-  const handleListItemClick = (value: string) => {
-    onClose(value);
-  };
-
   return (
     <Dialog
+      onClose={handleClose}
       BackdropProps={{
         style: { backgroundColor: 'transparent' },
       }}
-      onClose={handleClose}
       open={open}
     >
-      <DialogTitle>Name related projects : </DialogTitle>
-      <List sx={{ pt: 0 }}>
-        {emails.map((email) => (
-          <ListItem
-            button
-            onClick={() => handleListItemClick(email)}
-            key={email}
-          >
-            <ListItemText primary={email} />
-            <Typography>See More</Typography>
-          </ListItem>
-        ))}
+      <DialogTitle sx={{ pl: '16px' }}>Name related tasks : </DialogTitle>
+      <Typography sx={{ pl: '16px' }}>Login Page Front-end</Typography>
+      <List dense>
+        <ListItem>
+          <ListItemText primary="Estimed time" secondary="4h" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Total spent time" secondary="3h30" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Due Date" secondary="01/02/2022" />
+        </ListItem>
       </List>
     </Dialog>
   );

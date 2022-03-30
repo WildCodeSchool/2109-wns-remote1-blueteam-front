@@ -29,18 +29,14 @@ function DialogPopupProject(props: DialogPopup) {
       onClose={handleClose}
       open={open}
     >
-      <DialogTitle>Name related projects : </DialogTitle>
-      <List sx={{ pt: 0 }}>
-        {emails.map((email) => (
-          <ListItem
-            button
-            onClick={() => handleListItemClick(email)}
-            key={email}
-          >
-            <ListItemText primary={email} />
-            <Typography>See More</Typography>
-          </ListItem>
-        ))}
+      <DialogTitle sx={{ pl: '16px' }}>Name related projects : </DialogTitle>
+      <List dense>
+        <ListItem>
+          <ListItemText primary="Acme" secondary="See more" />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Blue" secondary="See more" />
+        </ListItem>
       </List>
     </Dialog>
   );

@@ -17,6 +17,7 @@ import {
 import { Box } from '@mui/system';
 import colors from '../../theme/colors';
 import DialogPopupProject from '../../components/dialog/DialogPopupProject';
+import DialogPopupTasks from '../../components/dialog/DialogPopupTask';
 
 // ***** TABLE ******
 
@@ -56,14 +57,20 @@ const TeamView = () => {
   const emails = ['username@gmail.com', 'user02@gmail.com'];
 
   const [open, setOpen] = React.useState(false);
+  const [openTask, setOpenTask] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
-  const handleClickOpen = () => {
+  const handleClickOpenProject = () => {
     setOpen(true);
+  };
+
+  const handleClickOpenTask = () => {
+    setOpenTask(true);
   };
 
   const handleClose = (value: string) => {
     setOpen(false);
+    setOpenTask(false);
     setSelectedValue(value);
   };
 
@@ -113,20 +120,21 @@ const TeamView = () => {
                   {rows.map((row) => (
                     <TableRow
                       key={row.member}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      sx={{
+                        '&:last-child td, &:last-child th': {
+                          border: 0,
+                        },
+                      }}
                     >
                       <TableCell component="th" scope="row">
                         {row.member}
                       </TableCell>
-                      <TableCell onClick={handleClickOpen} align="right">
+                      <TableCell onClick={handleClickOpenProject} align="right">
                         {row.project}
-                        <DialogPopupProject
-                          selectedValue={selectedValue}
-                          open={open}
-                          onClose={handleClose}
-                        />
                       </TableCell>
-                      <TableCell align="right">{row.tasks}</TableCell>
+                      <TableCell onClick={handleClickOpenTask} align="right">
+                        {row.tasks}
+                      </TableCell>
                       <TableCell align="right">{row.totaltasks}</TableCell>
                       <TableCell align="right">{row.date}</TableCell>
                     </TableRow>
@@ -137,6 +145,16 @@ const TeamView = () => {
           </Box>
         </Grid>
       </Grid>
+      <DialogPopupProject
+        selectedValue={selectedValue}
+        open={open}
+        onClose={handleClose}
+      />
+      <DialogPopupTasks
+        selectedValue={selectedValue}
+        open={openTask}
+        onClose={handleClose}
+      />
     </>
   );
 };
