@@ -10,7 +10,7 @@ import { IUser } from '../../interfaces/users';
 
 // Generate Order Data
 
-const Tables = () => {
+const TableUsers = () => {
   const [users, setUsers] = useState([]);
 
   const GETALLUSERS = gql`
@@ -64,4 +64,4 @@ const Tables = () => {
   );
 };
 
-export default Tables;
+export default TableUsers;
