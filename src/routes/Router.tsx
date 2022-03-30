@@ -6,6 +6,7 @@ import Profile from '../screens/profile/Profile';
 import TaskList from '../screens/tasklist/TaskList';
 import Layout from '../components/layout/Layout';
 import TaskDetails from '../screens/taskDetails/TaskDetails';
+import TeamView from '../screens/teamview/TeamView';
 
 const Router: FC = () => (
   <Layout>
@@ -15,7 +16,7 @@ const Router: FC = () => (
       <Route path="/signup" element={<SignUp />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/taskdetails" element={<TaskDetails />} />
-      <Route path="/tasklist" element={<TaskList />} />
+      <Route path="/teamview" element={<TeamView />} />
     </Routes>
   </Layout>
 );
