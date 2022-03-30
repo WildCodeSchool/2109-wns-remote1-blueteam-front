@@ -1,7 +1,5 @@
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
-import colors from '../../theme/colors';
-
 import {
   Button,
   FormControl,
@@ -17,15 +15,19 @@ import {
   TableRow,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import colors from '../../theme/colors';
+import DialogPopupProject from '../../components/dialog/DialogPopupProject';
+
+// ***** TABLE ******
 
 function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: string,
-  protein: string
+  member: string,
+  project: number,
+  tasks: number,
+  totaltasks: string,
+  date: string
 ) {
-  return { name, calories, fat, carbs, protein };
+  return { member, project, tasks, totaltasks, date };
 }
 
 const rows = [
@@ -36,6 +38,10 @@ const rows = [
   createData('Kurt Vile', 4, 4, '7h50', '30/08/22'),
 ];
 
+// ********
+
+// **** SELECT ****
+
 const TeamView = () => {
   const [age, setAge] = React.useState('');
 
@@ -43,18 +49,38 @@ const TeamView = () => {
     setAge(event.target.value);
   };
 
+  // ***********
+
+  // **** DIALOG POPUP *****
+
+  const emails = ['username@gmail.com', 'user02@gmail.com'];
+
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value: string) => {
+    setOpen(false);
+    setSelectedValue(value);
+  };
+
+  // *********
+
   return (
     <>
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Box sx={{ mt: 2, ml: 2, width: '50%' }}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Age</InputLabel>
+              <InputLabel>Team Member</InputLabel>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                labelId=""
+                id=""
                 value={age}
-                label="Age"
+                label="Team Member"
                 onChange={handleChange}
               >
                 <MenuItem value={10}>Ten</MenuItem>
@@ -86,16 +112,23 @@ const TeamView = () => {
                 <TableBody>
                   {rows.map((row) => (
                     <TableRow
-                      key={row.name}
+                      key={row.member}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
-                        {row.name}
+                        {row.member}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell onClick={handleClickOpen} align="right">
+                        {row.project}
+                        <DialogPopupProject
+                          selectedValue={selectedValue}
+                          open={open}
+                          onClose={handleClose}
+                        />
+                      </TableCell>
+                      <TableCell align="right">{row.tasks}</TableCell>
+                      <TableCell align="right">{row.totaltasks}</TableCell>
+                      <TableCell align="right">{row.date}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
