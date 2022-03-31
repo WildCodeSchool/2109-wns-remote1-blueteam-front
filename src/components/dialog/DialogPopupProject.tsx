@@ -5,10 +5,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import { Typography } from '@mui/material';
 import { DialogPopup } from '../../interfaces/dialog';
-
-const emails = ['Project 1', 'Project 2'];
 
 function DialogPopupProject(props: DialogPopup) {
   const { onClose, selectedValue, open } = props;
