@@ -2,6 +2,7 @@ import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import {
   Button,
+  createMuiTheme,
   FormControl,
   Grid,
   InputLabel,
@@ -40,6 +41,12 @@ const rows = [
 ];
 
 // ********
+
+// **** POINTER *****
+
+const pointer = { cursor: 'pointer' };
+
+// ******
 
 // **** SELECT ****
 
@@ -117,8 +124,13 @@ const TeamView = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
+                  {rows.map((row, index) => (
                     <TableRow
+                      style={
+                        index % 2
+                          ? { background: 'whitesmoke' }
+                          : { background: 'white' }
+                      }
                       key={row.member}
                       sx={{
                         '&:last-child td, &:last-child th': {
@@ -130,10 +142,10 @@ const TeamView = () => {
                         {row.member}
                       </TableCell>
                       <TableCell onClick={handleClickOpenProject} align="right">
-                        {row.project}
+                        <div style={pointer}>{row.project}</div>
                       </TableCell>
                       <TableCell onClick={handleClickOpenTask} align="right">
-                        {row.tasks}
+                        <div style={pointer}>{row.tasks}</div>
                       </TableCell>
                       <TableCell align="right">{row.totaltasks}</TableCell>
                       <TableCell align="right">{row.date}</TableCell>
