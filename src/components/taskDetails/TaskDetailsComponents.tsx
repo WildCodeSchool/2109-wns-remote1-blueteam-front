@@ -9,8 +9,10 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider, Theme } from '@mui/material/styles';
+import { makeStyles, createStyles } from '@mui/styles';
 import {
+  TextField,
   FormControl,
   FormHelperText,
   InputLabel,
@@ -21,11 +23,28 @@ import {
 } from '@mui/material';
 import colors from '../../theme/colors';
 
-const cards = [1, 2, 3];
-
 const theme = createTheme();
 
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  //commentary
+  textfieldCommentary: {
+    '& .MuiOutlinedInput-root': {  
+      '& fieldset': {            
+          borderColor: 'pink',   
+      },
+      '&:hover fieldset': {
+          borderColor: 'yellow', 
+      },
+      '&.Mui-focused fieldset': { 
+          borderColor: 'green',
+      },
+  }}}));
+
+const cards = [1, 2, 3];
+
 const TaskDetailsComponents = () => {
+  const classes = useStyles({});
+
   const [name, setName] = React.useState('');
 
   const handleChangeName = (event: SelectChangeEvent) => {
@@ -77,52 +96,31 @@ const TaskDetailsComponents = () => {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <main>
-          {/* Hero unit */}
+      
+        
           <Box
             sx={{
-              bgcolor: 'background.paper',
+              backgroundColor: 'background.paper',
               pt: 2,
               pb: 2,
             }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Typography
-                  component="h1"
-                  variant="h6"
-                  align="left"
-                  color="text.primary"
-                  gutterBottom
-                >
-                  Details :
-                </Typography>
-                <Container maxWidth="sm">
-                  <Typography
-                    variant="h5"
-                    align="center"
-                    color="text.secondary"
-                    paragraph
-                  >
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Enim hic modi quam! Aut dignissimos dolor facilis minima
-                    placeat quos, ullam vel. Alias aperiam dolore eligendi
-                    laborum magnam natus nihil suscipit. Lorem ipsum dolor sit
-                    amet, consectetur adipisicing elit. Earum illum labore
-                    magnam minus perspiciatis praesentium ullam voluptatibus?
-                    Eos ex laudantium perferendis, perspiciatis ratione vero.
-                    Deleniti dolore impedit numquam pariatur veritatis. Lorem
-                    ipsum dolor sit amet, consectetur adipisicing elit. Alias
-                    aliquid, consectetur deserunt dignissimos eveniet expedita,
-                    incidunt molestiae necessitatibus nostrum pariatur, quaerat
-                    quia. Animi architecto at doloribus dolorum qui repellat
-                    temporibus.
-                  </Typography>
+              <Grid item xs={6} >
+                <Container >
+                <TextField className={classes.textfieldCommentary}
+                  sx={{width: '100%'}}
+                  id="outlined-multiline-static"
+                  label="Details"
+                  multiline
+                  rows={4}
+                  placeholder="Some details"
+                />
                 </Container>
               </Grid>
               <Grid item xs={6}>
                 <form>
-                  <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <FormControl sx={{ minWidth: 120 }}>
                     <InputLabel>Assignee to</InputLabel>
                     <Select
                       value={name}
@@ -139,29 +137,49 @@ const TaskDetailsComponents = () => {
                     </Select>
                     <FormHelperText>Person who is assigned</FormHelperText>
                     <Grid container>
-                      <Grid item xs={6}>
-                        <Typography
-                          component="h3"
-                          variant="body2"
-                          color="text.secondary"
-                          align="center"
-                          sx={{ whiteSpace: 'nowrap' }}
-                        >
-                          Initial time spent estimee
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={6}>
+                      <Grid item xs={6} sx={{ mt: 2}}>
                         <Typography
                           component="h4"
                           variant="body2"
                           color="text.secondary"
-                          align="center"
+                          
+                          sx={{ whiteSpace: 'nowrap', }}
                         >
-                          240 minutes
+                          Initial estimed spent time :
                         </Typography>
                       </Grid>
-                    </Grid>
-                    <Box sx={{ width: 300 }}>
+                      <Grid item xs={6}>
+                        <Typography style={{ backgroundColor: "lightgrey", width: '100px' }}
+                          component="h4"
+                          variant="body2"
+                          color="text.secondary"
+                         
+                        >
+                         <div >400 minutes</div>
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={6} sx={{ mt: 2}}>
+                        <Typography 
+                          component="h4"
+                          variant="body2"
+                          color="text.secondary"
+                        
+                          sx={{ whiteSpace: 'nowrap' }}
+                        >
+                          Total time spent :
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={6} sx={{ mt: 2}}>
+                        <Typography style={{ backgroundColor: "lightgrey", width: '100px' }}
+                          component="h4"
+                          variant="body2"
+                          color="text.secondary"
+                         
+                        >
+                           <div >240 minutes</div>
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12} sx={{ mt: 2}}><Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Always visible"
                         defaultValue={40}
@@ -172,9 +190,39 @@ const TaskDetailsComponents = () => {
                         max={240}
                         sx={{ color: colors.warningColor }}
                       />
-                    </Box>
-                  </FormControl>
-                  <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    </Box></Grid>
+                    <Grid item xs={6} sx={{ mt: 2}}>
+                        <Typography
+                          component="h4"
+                          variant="body2"
+                          color="text.secondary"
+                          
+                          sx={{ whiteSpace: 'nowrap' }}
+                        >
+                          Percentage time spent :
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={6} sx={{ mt: 2}}>
+                        <Typography style={{ backgroundColor: "lightgrey", width: '100px' }}
+                          component="h4"
+                          variant="body2"
+                          color="text.secondary"
+                         
+                        >
+                          <div >66%</div>
+                          
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12} sx={{ mt: 2}}>
+                      <Button color="warning" variant="contained" sx={{ mt: 2,
+                     ':hover': {
+                        color: "warning",
+                        bgColor:"white",
+                        },}}
+                        >Update</Button>
+                      </Grid>
+                      <Grid item xs={12} sx={{ mt: 2}}>
+                      <FormControl sx={{ minWidth: 120 }}>
                     <InputLabel>Status</InputLabel>
                     <Select
                       value={status}
@@ -189,6 +237,11 @@ const TaskDetailsComponents = () => {
                       <MenuItem value={'Not Started'}>Not started</MenuItem>
                     </Select>
                   </FormControl>
+                      </Grid>
+                    </Grid>
+                   
+                  </FormControl>
+                 
                 </form>
               </Grid>
             </Grid>
@@ -238,7 +291,7 @@ const TaskDetailsComponents = () => {
               ))}
             </Grid>
           </Container>
-        </main>
+       
       </ThemeProvider>
     </>
   );
