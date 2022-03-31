@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Table from '../../components/table/Table';
+import TaskDetailsComponents from '../../components/taskDetails/TaskDetailsComponents';
 import Copyright from '../../components/copyright/Copyright';
 
 const mdTheme = createTheme();
@@ -26,16 +26,13 @@ const DashboardContent = () => (
           overflow: 'auto',
         }}
       >
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                <Table />
-              </Paper>
-            </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+              <TaskDetailsComponents />
+            </Paper>
           </Grid>
-          <Copyright sx={{ pt: 4 }} />
-        </Container>
+        </Grid>
       </Box>
     </Box>
   </ThemeProvider>

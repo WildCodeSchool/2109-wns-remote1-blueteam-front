@@ -18,6 +18,7 @@ import { Link, useLocation } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import ArticleIcon from '@mui/icons-material/Article';
 import LogoutIcon from '@mui/icons-material/Logout';
+import GroupsIcon from '@mui/icons-material/Groups';
 import Avatar from '@mui/material/Avatar';
 import { stringAvatar } from '../../services/avatarServices';
 
@@ -111,6 +112,12 @@ const MiniDrawer: FC = ({ children }) => {
       id: '2',
     },
     {
+      path: '/teamview',
+      name: 'Team View',
+      icon: <GroupsIcon fontSize="medium" sx={{ fill: '#FF7F50' }} />,
+      id: '3',
+    },
+    {
       path: '/profile',
       name: 'Profile',
       icon: (
@@ -131,13 +138,13 @@ const MiniDrawer: FC = ({ children }) => {
           {stringAvatar('Robert Ford')}
         </Avatar>
       ),
-      id: '3',
+      id: '4',
     },
     {
       path: '/logout',
       name: 'Logout',
       icon: <LogoutIcon fontSize="medium" sx={{ fill: '#FF7F50' }} />,
-      id: '4',
+      id: '5',
     },
   ];
   // TODO remplacer les couleurs par le dossier Color
