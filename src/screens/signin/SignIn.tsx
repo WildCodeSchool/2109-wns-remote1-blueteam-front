@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC, FormEvent, useContext, useEffect } from 'react';
 import { gql, useLazyQuery } from '@apollo/client';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,33 +13,49 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import logo from '../../assets/images/blue_logo.png';
 import Copyright from '../../components/copyright/Copyright';
-import IPage from '../../interfaces/pages';
-import { IUserLogin } from '../../interfaces/users';
+import { IUser, IUserLogin } from '../../interfaces/users';
+import userContext from '../../context/userContext';
 
 const theme = createTheme();
 
 const LOGIN = gql`
-  query Login($data: LoginInput!) {
+  query Query($data: LoginInput!) {
     login(data: $data) {
       id
+      firstname
+      lastname
+      email
+      job
+      role
     }
   }
 `;
 
-const SignIn = (props: IPage) => {
-  const [login] = useLazyQuery<
-    { login: { _id: string } },
+const SignIn: FC = () => {
+  const [, setUser] = useContext(userContext);
+
+  const [login, { data }] = useLazyQuery<
+    { login: IUser },
     { data: IUserLogin }
   >(LOGIN);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (data) {
+      setUser(data.login);
+    }
+  }, [data]);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+
+    const formData = new FormData(event.currentTarget);
+
     const UserLogin = {
-      email: (data.get('email') as string) || '',
-      password: (data.get('password') as string) || '',
+      email: (formData.get('email') as string) || '',
+      password: (formData.get('password') as string) || '',
     };
-    login({ variables: { data: UserLogin } });
+
+    await login({ variables: { data: UserLogin } });
   };
 
   return (
