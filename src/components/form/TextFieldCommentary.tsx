@@ -1,7 +1,6 @@
 import { TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import colors from '../../theme/colors';
-import { TextFieldContent } from '../../interfaces/textFieldContent';
 
 const useStyles = makeStyles({
   textfieldStyle: {

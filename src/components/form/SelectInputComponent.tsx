@@ -1,13 +1,7 @@
 import * as React from 'react';
 import { makeStyles } from '@mui/styles';
-
-import {
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from '@mui/material';
+import { InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { SelectInputText } from '../../interfaces/selectInput';
 import colors from '../../theme/colors';
 
 const useStyles = makeStyles({
@@ -24,9 +18,6 @@ const useStyles = makeStyles({
     },
   },
 });
-export interface SelectInputText {
-  text: string;
-}
 
 const SelectInputComponent: React.FC<SelectInputText> = ({ text }) => {
   const [name, setName] = React.useState('');
