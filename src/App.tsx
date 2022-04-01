@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import './App.css';
 
 import {
@@ -7,8 +7,12 @@ import {
   InMemoryCache,
   ApolloProvider,
 } from '@apollo/client';
+
 import { BrowserRouter } from 'react-router-dom';
+import userContext from './context/userContext';
+
 import Router from './routes/Router';
+import { IUser } from './interfaces/users';
 
 const link = createHttpLink({
   uri: 'http://localhost:5050/graphql',
@@ -20,12 +24,18 @@ const client = new ApolloClient({
   link,
 });
 
-const App: FC = () => (
-  <ApolloProvider client={client}>
-    <BrowserRouter>
-      <Router />
-    </BrowserRouter>
-  </ApolloProvider>
-);
+const App: FC = () => {
+  const [user, setUser] = useState<IUser | undefined>(undefined);
+
+  return (
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <userContext.Provider value={[user, setUser]}>
+          <Router />
+        </userContext.Provider>
+      </BrowserRouter>
+    </ApolloProvider>
+  );
+};
 
 export default App;
