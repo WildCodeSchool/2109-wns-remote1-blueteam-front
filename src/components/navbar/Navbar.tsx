@@ -20,7 +20,9 @@ import ArticleIcon from '@mui/icons-material/Article';
 import LogoutIcon from '@mui/icons-material/Logout';
 import GroupsIcon from '@mui/icons-material/Groups';
 import Avatar from '@mui/material/Avatar';
+
 import { stringAvatar } from '../../services/avatarServices';
+import Copyright from '../copyright/Copyright';
 
 const drawerWidth = 200;
 

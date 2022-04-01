@@ -6,7 +6,6 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -19,6 +18,7 @@ import TextFieldCommentary from '../../components/form/TextFieldCommentary';
 import colors from '../../theme/colors';
 import SelectInputComponent from '../../components/form/SelectInputComponent';
 import CardComponent from '../../components/form/CardComponent';
+import ButtonComponent from '../../components/form/ButtonComponent';
 
 function valuetext(value: number) {
   return `${value} minutes`;
@@ -69,7 +69,6 @@ const TaskDetails = () => {
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
         <Box
           component="main"
           sx={{
@@ -78,15 +77,11 @@ const TaskDetails = () => {
                 ? theme.palette.grey[100]
                 : theme.palette.grey[900],
             flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
           }}
         >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                <CssBaseline />
-
                 <Box
                   sx={{
                     backgroundColor: 'background.paper',
@@ -103,7 +98,7 @@ const TaskDetails = () => {
                     <Grid item xs={6}>
                       <form>
                         <FormControl sx={{ minWidth: 120 }}>
-                          <SelectInputComponent />
+                          <SelectInputComponent text="Assigned to" />
                           <Grid container>
                             <Grid item xs={6} sx={{ mt: 2 }}>
                               <Typography
@@ -188,40 +183,14 @@ const TaskDetails = () => {
                               </Typography>
                             </Grid>
                             <Grid item xs={12} sx={{ mt: 2 }}>
-                              <Button
-                                color="warning"
-                                variant="contained"
-                                sx={{
-                                  mt: 2,
-                                  ':hover': {
-                                    color: 'warning',
-                                    bgColor: 'white',
-                                  },
-                                }}
+                              <FormControl
+                                sx={{ minWidth: 120, width: '100%' }}
                               >
-                                Update
-                              </Button>
+                                <SelectInputComponent text="Status" />
+                              </FormControl>
                             </Grid>
                             <Grid item xs={12} sx={{ mt: 2 }}>
-                              <FormControl sx={{ minWidth: 120 }}>
-                                <InputLabel>Status</InputLabel>
-                                <Select
-                                  value={status}
-                                  label="Status"
-                                  onChange={handleChangeStatus}
-                                >
-                                  <MenuItem value="">
-                                    <em>None</em>
-                                  </MenuItem>
-                                  <MenuItem value="In progress">
-                                    in progress
-                                  </MenuItem>
-                                  <MenuItem value="Finish">Finish</MenuItem>
-                                  <MenuItem value="Not Started">
-                                    Not started
-                                  </MenuItem>
-                                </Select>
-                              </FormControl>
+                              <ButtonComponent text="Update" />
                             </Grid>
                           </Grid>
                         </FormControl>
@@ -238,15 +207,13 @@ const TaskDetails = () => {
                 >
                   Assets :
                 </Typography>
-                <Container sx={{ py: 4 }} maxWidth="lg">
-                  <Grid container spacing={4}>
-                    {cards.map((card) => (
-                      <Grid item key={card} xs={12} sm={6} md={4}>
-                        <CardComponent />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Container>
+                <Grid container spacing={4}>
+                  {cards.map((card) => (
+                    <Grid item key={card} xs={12} sm={6} md={4}>
+                      <CardComponent />
+                    </Grid>
+                  ))}
+                </Grid>
               </Paper>
             </Grid>
           </Grid>
