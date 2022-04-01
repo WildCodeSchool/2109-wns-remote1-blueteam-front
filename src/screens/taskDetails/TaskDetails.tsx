@@ -1,15 +1,12 @@
 import * as React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {
   FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   SelectChangeEvent,
   Slider,
   Typography,
@@ -27,12 +24,6 @@ function valuetext(value: number) {
 const mdTheme = createTheme();
 
 const TaskDetails = () => {
-  const [status, setStatus] = React.useState('');
-
-  const handleChangeStatus = (event: SelectChangeEvent) => {
-    setStatus(event.target.value);
-  };
-
   const marks = [
     {
       value: 0,
