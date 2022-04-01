@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { makeStyles } from '@mui/styles';
 
 import {
   FormHelperText,
@@ -7,28 +8,50 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
+import colors from '../../theme/colors';
 
-function SelectInputComponent() {
+const useStyles = makeStyles({
+  textfieldCommentary: {
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: colors.warningColor,
+      },
+    },
+  },
+  select: {
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: colors.warningColor,
+    },
+  },
+});
+export interface SelectInputText {
+  text: string;
+}
+
+const SelectInputComponent: React.FC<SelectInputText> = ({ text }) => {
   const [name, setName] = React.useState('');
+  const classes = useStyles();
 
   const handleChangeName = (event: SelectChangeEvent) => {
     setName(event.target.value);
   };
   return (
     <>
-      <InputLabel>Assignee to</InputLabel>
-      <Select name="John" label="Assignee to" onChange={handleChangeName}>
+      <InputLabel>{text}</InputLabel>
+      <Select
+        className={classes.select}
+        name=""
+        label={text}
+        onChange={handleChangeName}
+      >
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
-        <MenuItem value="John Doe">John Doe</MenuItem>
-        <MenuItem value="Jane Doe">Jane Doe</MenuItem>
-        <MenuItem value="Elon Musk">Elon Musk</MenuItem>
-        <MenuItem value="Bill Gates">Bill Gates</MenuItem>
+        <MenuItem />
       </Select>
-      <FormHelperText>Person who is assigned</FormHelperText>
+      {/* <FormHelperText>Person who is assigned</FormHelperText> */}
     </>
   );
-}
+};
 
 export default SelectInputComponent;
