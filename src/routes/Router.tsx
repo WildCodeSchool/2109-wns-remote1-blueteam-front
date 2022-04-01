@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import SignIn from '../screens/signin/SignIn';
 import SignUp from '../screens/signup/SignUp';
@@ -8,17 +8,26 @@ import Layout from '../components/layout/Layout';
 import TaskDetails from '../screens/taskDetails/TaskDetails';
 import TeamView from '../screens/teamview/TeamView';
 
-const Router: FC = () => (
-  <Layout>
-    <Routes>
-      <Route path="/" element={<TaskList />} />
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/taskdetails" element={<TaskDetails />} />
-      <Route path="/teamview" element={<TeamView />} />
-    </Routes>
-  </Layout>
-);
+import useUser from '../hooks/useUser';
+
+const Router: FC = () => {
+  const [user] = useUser();
+
+  return (
+    <Layout>
+      <Routes>
+        <Route path="/" element={<TaskList />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/profile" element={user ? <Profile /> : <SignIn />} />
+        <Route
+          path="/taskdetails"
+          element={user ? <TaskDetails /> : <SignIn />}
+        />
+        <Route path="/teamview" element={user ? <TeamView /> : <SignIn />} />
+      </Routes>
+    </Layout>
+  );
+};
 
 export default Router;
