@@ -24,6 +24,7 @@ const Router: FC = () => {
           path="/taskdetails"
           element={user ? <TaskDetails /> : <SignIn />}
         />
+        <Route path="/tasklist" element={user ? <TaskList /> : <SignIn />} />
         <Route path="/teamview" element={user ? <TeamView /> : <SignIn />} />
       </Routes>
     </Layout>
