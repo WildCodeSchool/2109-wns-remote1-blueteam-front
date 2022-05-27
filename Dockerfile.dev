@@ -1,0 +1,14 @@
+#Dockerfile Front 😊
+FROM node:lts
+
+WORKDIR /client
+COPY package.json ./
+COPY yarn.lock ./
+RUN yarn install
+COPY tsconfig.json ./
+COPY public public
+COPY src src
+
+ENV ESLINT_NO_DEV_ERRORS=true
+ENV REACT_APP_API_URL=http://localhost:5050/graphql
+CMD yarn start
