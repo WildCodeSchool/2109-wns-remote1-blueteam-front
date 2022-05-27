@@ -20,8 +20,8 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import colors from '../../theme/colors';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
+import colors from '../../theme/colors';
 
 // DATA DECLARATION
 
@@ -71,7 +71,7 @@ const StyledTableSortLabel = styled(TableSortLabel)(({ theme }) => ({
 }));
 
 /* ------------------------ TABLE FUNCTIONS -----------------------------*/
-//ordering function
+//  ordering function
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
