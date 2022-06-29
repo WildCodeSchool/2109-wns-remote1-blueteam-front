@@ -14,7 +14,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import logo from '../../assets/images/blue_logo.png';
 import Copyright from '../../components/copyright/Copyright';
 import { IUser, IUserLogin } from '../../interfaces/users';
-import userContext from '../../context/userContext';
+import useUser from "../../hooks/useUser";
 
 const theme = createTheme();
 
@@ -32,7 +32,7 @@ const LOGIN = gql`
 `;
 
 const SignIn: FC = () => {
-  const [, setUser] = useContext(userContext);
+  const [, setUser] = useUser();
 
   const [login, { data }] = useLazyQuery<
     { login: IUser },
