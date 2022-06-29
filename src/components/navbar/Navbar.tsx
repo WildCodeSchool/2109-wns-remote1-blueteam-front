@@ -156,6 +156,17 @@ const MiniDrawer: React.FC = ({ children }) => {
     const currentpage = currentPageName();
     setPageName(currentpage);
   });
+
+  const navigate = useNavigate();
+  const logout = useLogoutMutation();
+  const [,setUser] = useUser();
+
+  const logoutAndRedirect  = async() => {
+    await logout.logoutMutation();
+    navigate("/signin", { replace: true });
+    setUser(null);
+  }
+
   const theme = useTheme();
 
   const [open, setOpen] = React.useState(false);
