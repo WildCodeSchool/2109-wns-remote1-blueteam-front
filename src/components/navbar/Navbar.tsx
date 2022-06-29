@@ -224,6 +224,24 @@ const MiniDrawer: FC = ({ children }) => {
                 </Link>
               </MenuItem>
             ))}
+            <MenuItem
+              key='5'
+              onClick={ async() => {
+                await logoutAndRedirect();
+              }
+            }
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                textDecoration: 'none',
+                color: '#197BBD',
+              }}
+            >
+              <ListItemIcon sx={{ mr: 1 }}>
+                <LogoutIcon fontSize="medium" sx={{ fill: '#FF7F50' }} />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
           </MenuList>
           <Divider />
         </Drawer>
