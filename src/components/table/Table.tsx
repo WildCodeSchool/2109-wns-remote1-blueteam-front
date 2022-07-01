@@ -27,7 +27,7 @@ import colors from '../../theme/colors';
 
 /* ------------------------ TABLE Styled() COMPONENTS -----------------------------*/
 // TABLE STYLING
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(TableRow)(() => ({
   // base colors for items and hovering
   [`&:nth-of-type(odd)`]: {
     backgroundColor: alpha(colors.mainColor, 0.1),
@@ -50,7 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: colors.mainColor,
     color: colors.light,
@@ -60,7 +60,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableSortLabel = styled(TableSortLabel)(({ theme }) => ({
+const StyledTableSortLabel = styled(TableSortLabel)(() => ({
   [`&.${tableSortLabelClasses.active}`]: {
     color: colors.light,
     fontWeight: 'bold',
@@ -219,7 +219,7 @@ const EnhancedTableToolbar = (props: IEnhancedTableToolbarProps) => {
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
-          bgcolor: (theme) => alpha(colors.mainColor, 0.1),
+          bgcolor: () => alpha(colors.mainColor, 0.1),
         }),
       }}
     >
@@ -287,7 +287,7 @@ export default function EnhancedTable<DataType extends DataWithId>(
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = data.map((n) => n.id);
+      const newSelecteds = data.map(({ id }) => id);
       setSelected(newSelecteds);
       return;
     }
@@ -339,7 +339,9 @@ export default function EnhancedTable<DataType extends DataWithId>(
     (
       arr: { [key in keyof DataType]?: keyof typeof data[0] },
       dataKey: string
-    ): {[key in keyof DataType]?: keyof typeof data[0]} => {
+    ): { [key in keyof DataType]?: keyof typeof data[0] } => {
+      // rule disabled because it is the way reduce() works and the spread work around needlessly induces performance issues.
+      // eslint-disable-next-line no-param-reassign
       arr[dataKey as keyof DataType] =
         typeof data[0][dataKey as keyof DataType];
       return arr;
@@ -403,18 +405,24 @@ export default function EnhancedTable<DataType extends DataWithId>(
                         id={labelId}
                         scope="row"
                         padding="none"
-                        align={typeof row.id === "number" ? "right" : "left"}
+                        align={typeof row.id === 'number' ? 'right' : 'left'}
                       >
                         {row.id}
                       </StyledTableCell>
                       {Object.values(row).map((property) => {
                         if (property !== row.id) {
                           return (
-                            <StyledTableCell align={typeof property === "number" ? "right" : "left"}>
+                            <StyledTableCell
+                              align={
+                                typeof property === 'number' ? 'right' : 'left'
+                              }
+                              key={`${row.id}${property}`}
+                            >
                               {property}
                             </StyledTableCell>
                           );
                         }
+                        return null;
                       })}
                     </StyledTableRow>
                   );
@@ -425,7 +433,7 @@ export default function EnhancedTable<DataType extends DataWithId>(
                     height: 53 * emptyRows,
                   }}
                 >
-                  <StyledTableCell colSpan={6} />
+                  <StyledTableCell colSpan={100} />
                 </StyledTableRow>
               )}
             </TableBody>

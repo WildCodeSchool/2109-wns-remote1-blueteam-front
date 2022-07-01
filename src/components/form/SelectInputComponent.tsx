@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 });
 
 const SelectInputComponent: React.FC<SelectInputText> = ({ text }) => {
-  const [name, setName] = React.useState('');
+  const [, setName] = React.useState('');
   const classes = useStyles();
 
   const handleChangeName = (event: SelectChangeEvent) => {

@@ -1,7 +1,7 @@
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 import EnhancedTable from '../../components/table/Table';
 
-type Task = {
+type Project = {
   id: number;
   subject: string;
   project: string;
@@ -10,9 +10,9 @@ type Task = {
   'Due date': string;
 };
 
-const TaskList = (): ReactJSXElement => {
-  const title = 'Task Details';
-  const tasks: Task[] = [
+const ProjectList = (): ReactJSXElement => {
+  const title = 'Project Details';
+  const projects: Project[] = [
     {
       id: 1,
       subject: 'Nain 1',
@@ -68,10 +68,10 @@ const TaskList = (): ReactJSXElement => {
       status: 'To do',
       assignee: 'Atchoum',
       'Due date': new Date().toLocaleString(),
-    }
+    },
   ];
 
-  return EnhancedTable(title, tasks);
+  return EnhancedTable(title, projects);
 };
 
-export default TaskList;
+export default ProjectList;

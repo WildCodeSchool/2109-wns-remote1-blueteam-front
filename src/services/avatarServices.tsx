@@ -1,6 +1,4 @@
-import * as React from 'react';
-
-export function stringToColor(string: string) {
+export function stringToColor(string: string): string {
   let hash = 0;
   let i;
 
@@ -13,13 +11,13 @@ export function stringToColor(string: string) {
 
   for (i = 0; i < 3; i += 1) {
     const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.substr(-2);
+    color += `00${value.toString(16)}`.substring(-2);
   }
   /* eslint-enable no-bitwise */
 
   return color;
 }
 
-export function stringAvatar(name: string) {
+export function stringAvatar(name: string): string {
   return `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`;
 }

@@ -10,6 +10,14 @@ export interface IUserLogin {
   password: string;
 }
 
+export interface IUserUpdate {
+  firstname?: { set: string };
+  lastname?: { set: string };
+  job?: { set: string };
+  email?: { set: string };
+  // password: string;
+}
+
 // Typing of the role key in IUser
 export enum IRole {
   ADMIN = 'ADMIN',
@@ -22,5 +30,5 @@ export interface IUser {
   lastname: string;
   job: string;
   email: string;
-  role: unknown; // unknown for now, but need to be relaced by IRole
+  role: typeof IRole; // unknown for now, but need to be relaced by IRole
 }

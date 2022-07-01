@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import SignIn from '../screens/signin/SignIn';
 import SignUp from '../screens/signup/SignUp';
 import Profile from '../screens/profile/Profile';
-import TaskList from '../screens/tasklist/TaskList';
+import TaskList from '../screens/taskList/TaskList';
 import Layout from '../components/layout/Layout';
 import TaskDetails from '../screens/taskDetails/TaskDetails';
 import TeamView from '../screens/teamview/TeamView';

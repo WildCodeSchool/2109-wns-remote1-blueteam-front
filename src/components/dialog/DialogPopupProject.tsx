@@ -14,9 +14,9 @@ function DialogPopupProject(props: DialogPopup) {
     onClose(selectedValue);
   };
 
-  const handleListItemClick = (value: string) => {
-    onClose(value);
-  };
+  // const handleListItemClick = (value: string) => {
+  //   onClose(value);
+  // };
 
   return (
     <Dialog

@@ -1,4 +1,4 @@
-export default {
+const Colors = {
   mainColor: '#197BBD',
   warningColor: '#FF7F50',
   warningColorDarker: '#ff4e0d',
@@ -6,3 +6,5 @@ export default {
   dark: '#2F3640',
   tableHeaderColor: '#D3D3D3', // TableHeader
 };
+
+export default Colors;

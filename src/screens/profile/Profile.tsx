@@ -10,7 +10,10 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
+import { gql, useMutation } from '@apollo/client';
 import { stringToColor, stringAvatar } from '../../services/avatarServices';
+import { IUser, IUserUpdate } from '../../interfaces/users';
+import useUser from '../../hooks/useUser';
 
 const theme = createTheme();
 
@@ -18,11 +21,54 @@ const Input = styled('input')({
   display: 'none',
 });
 
+const UPDATE_USER = gql`
+  mutation UpdateUser($data: UserUpdateInput!, $where: UserWhereUniqueInput!) {
+    updateUser(data: $data, where: $where) {
+      avatar
+      firstname
+      lastname
+      job
+      email
+    }
+  }
+`;
+
 const Profile = (): ReactJSXElement => {
   const [pictureUrl, setPictureUrl] = useState('');
 
+  const [contextUser, loadingUser] = useUser();
+
+  const [userState, setUserState] = useState(contextUser as Partial<IUser>);
+
+  const [updateUser, { data, loading, error }] = useMutation<
+    { updatedUser: { _id: string } }, // server answer
+    { data: IUserUpdate; where: { id: string } } // data sent to server
+  >(UPDATE_USER);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const userUpdateInput = {
+      firstname: { set: formData.get('firstName') as string },
+      lastname: { set: formData.get('lastName') as string },
+      email: { set: formData.get('email') as string },
+      job: { set: formData.get('job') as string },
+      // password: (data.get('password') as string) || '',
+    };
+
+    console.log(userUpdateInput);
+
+    if (userState.id) {
+      updateUser({
+        variables: {
+          data: userUpdateInput,
+          where: {
+            id: userState.id,
+          },
+        },
+      });
+      console.log(contextUser);
+    }
   };
 
   return (
@@ -59,7 +105,7 @@ const Profile = (): ReactJSXElement => {
               spacing="2"
             >
               <Avatar
-                alt="Robert Ford"
+                alt={`${userState.firstname} ${userState.lastname}`}
                 src={pictureUrl || '.'}
                 sx={{
                   width: 100,
@@ -68,10 +114,12 @@ const Profile = (): ReactJSXElement => {
                   minHeight: 50,
                   border: 2,
                   borderColor: '#1565c0',
-                  bgcolor: stringToColor('Robert Ford'),
+                  bgcolor: stringToColor(
+                    `${userState.firstname} ${userState.lastname}`
+                  ),
                 }}
               >
-                {stringAvatar('Robert Ford')}
+                {stringAvatar(`${userState.firstname} ${userState.lastname}`)}
               </Avatar>
               <label htmlFor="contained-button-file">
                 <Input
@@ -96,18 +144,36 @@ const Profile = (): ReactJSXElement => {
             <TextField
               margin="normal"
               fullWidth
-              id="firstname"
+              id="firstName"
               label="Firstname"
-              name="firstname"
+              name="firstName"
               autoComplete="firstname"
+              value={userState.firstname}
+              placeholder=""
+              onChange={(e) => {
+                const newUserState = {
+                  ...userState,
+                  firstname: e.target.value,
+                };
+                setUserState(newUserState);
+              }}
             />
             <TextField
               margin="normal"
               fullWidth
-              id="lastname"
+              id="lastName"
               label="Lastname"
-              name="lastname"
+              name="lastName"
               autoComplete="lastname"
+              value={userState.lastname}
+              placeholder=""
+              onChange={(e) => {
+                const newUserState = {
+                  ...userState,
+                  lastname: e.target.value,
+                };
+                setUserState(newUserState);
+              }}
             />
             <TextField
               margin="normal"
@@ -116,6 +182,15 @@ const Profile = (): ReactJSXElement => {
               label="Job"
               name="job"
               autoComplete="organization-title"
+              value={userState.job}
+              placeholder=""
+              onChange={(e) => {
+                const newUserState = {
+                  ...userState,
+                  job: e.target.value,
+                };
+                setUserState(newUserState);
+              }}
             />
             <TextField
               margin="normal"
@@ -124,6 +199,15 @@ const Profile = (): ReactJSXElement => {
               label="Email Address"
               name="email"
               autoComplete="email"
+              value={userState.email}
+              placeholder=""
+              onChange={(e) => {
+                const newUserState = {
+                  ...userState,
+                  email: e.target.value,
+                };
+                setUserState(newUserState);
+              }}
             />
             <TextField
               margin="normal"
