@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { FC, useState } from 'react';
 import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -14,7 +13,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { MenuItem, MenuList } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
 import ArticleIcon from '@mui/icons-material/Article';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -23,6 +22,8 @@ import Avatar from '@mui/material/Avatar';
 
 import { stringAvatar } from '../../services/avatarServices';
 import Copyright from '../copyright/Copyright';
+import useLogoutMutation from '../../screens/logout/Logout';
+import useUser from "../../hooks/useUser";
 
 const drawerWidth = 200;
 
@@ -92,8 +93,8 @@ const Drawer = styled(MuiDrawer, {
     '& .MuiDrawer-paper': closedMixin(theme),
   }),
 }));
-const MiniDrawer: FC = ({ children }) => {
-  const [pictureUrl, setPictureUrl] = useState('');
+const MiniDrawer: React.FC = ({ children }) => {
+  const [pictureUrl, setPictureUrl] = React.useState('');
   // TODO ReduX
   const routes: {
     path: string;
@@ -142,12 +143,6 @@ const MiniDrawer: FC = ({ children }) => {
       ),
       id: '4',
     },
-    {
-      path: '/logout',
-      name: 'Logout',
-      icon: <LogoutIcon fontSize="medium" sx={{ fill: '#FF7F50' }} />,
-      id: '5',
-    },
   ];
   // TODO remplacer les couleurs par le dossier Color
 
@@ -161,6 +156,17 @@ const MiniDrawer: FC = ({ children }) => {
     const currentpage = currentPageName();
     setPageName(currentpage);
   });
+
+  const navigate = useNavigate();
+  const logout = useLogoutMutation();
+  const [,setUser] = useUser();
+
+  const logoutAndRedirect  = async() => {
+    await logout.logoutMutation();
+    navigate("/signin", { replace: true });
+    setUser(null);
+  }
+
   const theme = useTheme();
 
   const [open, setOpen] = React.useState(false);
@@ -224,6 +230,24 @@ const MiniDrawer: FC = ({ children }) => {
                 </Link>
               </MenuItem>
             ))}
+            <MenuItem
+              key='5'
+              onClick={ async() => {
+                await logoutAndRedirect();
+              }
+            }
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                textDecoration: 'none',
+                color: '#197BBD',
+              }}
+            >
+              <ListItemIcon sx={{ mr: 1 }}>
+                <LogoutIcon fontSize="medium" sx={{ fill: '#FF7F50' }} />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
           </MenuList>
           <Divider />
         </Drawer>
