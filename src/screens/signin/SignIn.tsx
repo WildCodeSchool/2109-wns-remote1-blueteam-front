@@ -15,6 +15,7 @@ import logo from '../../assets/images/blue_logo.png';
 import Copyright from '../../components/copyright/Copyright';
 import { IUser, IUserLogin } from '../../interfaces/users';
 import useUser from "../../hooks/useUser";
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
 
@@ -32,6 +33,7 @@ const LOGIN = gql`
 `;
 
 const SignIn: FC = () => {
+  let navigate = useNavigate();
   const [, setUser] = useUser();
 
   const [login, { data }] = useLazyQuery<
@@ -56,6 +58,7 @@ const SignIn: FC = () => {
     };
 
     await login({ variables: { data: UserLogin } });
+    navigate('/');
   };
 
   return (
