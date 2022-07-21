@@ -28,3 +28,8 @@ export interface IUser {
   email: string;
   role: unknown; // unknown for now, but need to be relaced by IRole
 }
+
+export interface IUserChangePassword {
+  token : string,
+  password : string
+}
