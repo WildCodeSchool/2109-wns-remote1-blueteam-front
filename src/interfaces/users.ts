@@ -10,6 +10,10 @@ export interface IUserLogin {
   password: string;
 }
 
+export interface IUserWithoutPassword {
+  email :string;
+}
+
 // Typing of the role key in IUser
 export enum IRole {
   ADMIN = 'ADMIN',
