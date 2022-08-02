@@ -9,8 +9,9 @@ import ProjectList from '../screens/projectList/ProjectList';
 import TaskList from '../screens/taskList/TaskList';
 import TaskDetails from '../screens/taskDetails/TaskDetails';
 import TeamView from '../screens/teamview/TeamView';
-
+import ForgotPasswordFunction from '../screens/forgotPassword/ForgotPassword';
 import useUser from '../hooks/useUser';
+import ChangePassword from "../screens/changePassword/ChangePassword";
 
 const Router: FC = () => {
   const [user] = useUser();
@@ -25,6 +26,8 @@ const Router: FC = () => {
         <Route path="projects" element={user ? <Outlet /> : <SignIn />}>
           <Route index element={user ? <ProjectList /> : <SignIn />} />
         </Route>
+        <Route path="/forgotpassword" element={<ForgotPasswordFunction />} />
+        <Route path="/changepassword" element={<ChangePassword />} />
         <Route
           path="taskdetails"
           element={user ? <TaskDetails /> : <SignIn />}

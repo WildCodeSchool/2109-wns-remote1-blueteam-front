@@ -19,6 +19,10 @@ export interface IUserUpdate {
   // password: string;
 }
 
+export interface IUserWithoutPassword {
+  email :string;
+}
+
 // Typing of the role key in IUser
 export enum IRole {
   ADMIN = 'ADMIN',
@@ -33,4 +37,9 @@ export interface IUser {
   job: string;
   email: string;
   role: IRole; // unknown for now, but need to be relaced by IRole
+}
+
+export interface IUserChangePassword {
+  token : string,
+  password : string
 }
