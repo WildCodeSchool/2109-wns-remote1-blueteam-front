@@ -11,6 +11,7 @@ export interface IUserLogin {
 }
 
 export interface IUserUpdate {
+  avatar?: { set: string };
   firstname?: { set: string };
   lastname?: { set: string };
   job?: { set: string };
@@ -26,9 +27,10 @@ export enum IRole {
 
 export interface IUser {
   id: string;
+  avatar: string;
   firstname: string;
   lastname: string;
   job: string;
   email: string;
-  role: typeof IRole; // unknown for now, but need to be relaced by IRole
+  role: IRole; // unknown for now, but need to be relaced by IRole
 }

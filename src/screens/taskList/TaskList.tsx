@@ -11,7 +11,7 @@ type Task = {
 };
 
 const TaskList = (): ReactJSXElement => {
-  const title = 'Task Details';
+  const title = 'Task List';
   const tasks: Task[] = [
     {
       id: 1,

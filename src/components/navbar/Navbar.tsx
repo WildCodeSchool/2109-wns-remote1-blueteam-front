@@ -13,18 +13,20 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { MenuItem, MenuList } from '@mui/material';
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 import ArticleIcon from '@mui/icons-material/Article';
 import LogoutIcon from '@mui/icons-material/Logout';
 import GroupsIcon from '@mui/icons-material/Groups';
 import Avatar from '@mui/material/Avatar';
 
-import { stringAvatar } from '../../services/avatarServices';
-import Copyright from '../copyright/Copyright';
+import { stringToColor, stringAvatar } from '../../services/avatarServices';
 import useLogoutMutation from '../../screens/logout/Logout';
-import useUser from "../../hooks/useUser";
+import useUser from '../../hooks/useUser';
+import Copyright from '../copyright/Copyright';
 
+// ------- Navbar styles -------
 const drawerWidth = 200;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -42,7 +44,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
-  width: `calc(${theme.spacing(5)} + 1px)`,
+  width: 0,
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(7)} + 1px)`,
   },
@@ -62,6 +64,9 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
+  position: 'sticky',
+  top: 0,
+  left: 0,
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
@@ -93,8 +98,35 @@ const Drawer = styled(MuiDrawer, {
     '& .MuiDrawer-paper': closedMixin(theme),
   }),
 }));
+
+// ------- Navbar logic -------
 const MiniDrawer: React.FC = ({ children }) => {
-  const [pictureUrl, setPictureUrl] = React.useState('');
+  const [user, setUser] = useUser();
+  const location = useLocation();
+  const navigate = useNavigate();
+  let avatarIcon = <></>;
+
+  if (user) {
+    avatarIcon = (
+      <Avatar
+        alt={`${user.firstname} ${user.lastname}`}
+        src={user.avatar || '.'}
+        sx={{
+          width: 25,
+          height: 25,
+          minWidth: 12,
+          minHeight: 12,
+          border: 2,
+          borderColor: '#1565c0',
+          bgcolor: stringToColor(`${user.firstname} ${user.lastname}`),
+          fontSize: 10,
+        }}
+      >
+        {user.avatar ? '' : stringAvatar(`${user.firstname} ${user.lastname}`)}
+      </Avatar>
+    );
+  }
+  // ------- Match route path and names and define icons for the menu -------
   // TODO ReduX
   const routes: {
     path: string;
@@ -109,44 +141,31 @@ const MiniDrawer: React.FC = ({ children }) => {
       id: '1',
     },
     {
-      path: '/taskDetails',
-      name: 'Task Details',
+      path: '/projects',
+      name: 'Projects List',
       icon: <ArticleIcon fontSize="medium" sx={{ fill: '#FF7F50' }} />,
       id: '2',
+    },
+    {
+      path: '/taskDetails',
+      name: 'Task Details',
+      icon: <ListAltIcon fontSize="medium" sx={{ fill: '#FF7F50' }} />,
+      id: '3',
     },
     {
       path: '/teamview',
       name: 'Team View',
       icon: <GroupsIcon fontSize="medium" sx={{ fill: '#FF7F50' }} />,
-      id: '3',
+      id: '4',
     },
     {
       path: '/profile',
       name: 'Profile',
-      icon: (
-        <Avatar
-          alt="Robert Ford"
-          src={pictureUrl || '.'}
-          sx={{
-            width: 25,
-            height: 25,
-            minWidth: 12,
-            minHeight: 12,
-            border: 2,
-            borderColor: '#1565c0',
-            bgcolor: '#FF7F50',
-            fontSize: 10,
-          }}
-        >
-          {stringAvatar('Robert Ford')}
-        </Avatar>
-      ),
-      id: '4',
+      icon: avatarIcon,
+      id: '5',
     },
   ];
-  // TODO remplacer les couleurs par le dossier Color
 
-  const location = useLocation();
   const currentPageName = () => {
     const route = routes.find(({ path }) => path === location.pathname);
     return route?.name || '';
@@ -157,18 +176,19 @@ const MiniDrawer: React.FC = ({ children }) => {
     setPageName(currentpage);
   });
 
-  const navigate = useNavigate();
+  // ------- Logout -------
   const logout = useLogoutMutation();
-  const [,setUser] = useUser();
 
-  const logoutAndRedirect  = async() => {
+  const logoutAndRedirect = async () => {
     await logout.logoutMutation();
-    navigate("/signin", { replace: true });
+    navigate('/signin', { replace: true });
     setUser(null);
-  }
+  };
 
   const theme = useTheme();
+  // TODO remplacer les couleurs par le dossier Color
 
+  // ------- Handle drawer toggling -------
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
@@ -177,82 +197,105 @@ const MiniDrawer: React.FC = ({ children }) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   return (
     <>
-      <AppBar position="sticky" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: '36px',
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {pageName}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <Drawer variant="permanent" open={open}>
-          <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? (
-                <ChevronRightIcon />
-              ) : (
-                <ChevronLeftIcon />
-              )}
-            </IconButton>
-          </DrawerHeader>
-          <Divider />
-          <MenuList
-            sx={{ py: 1, display: 'flex', flexFlow: 'column nowrap', gap: 2 }}
-          >
-            {routes.map(({ path, name, icon, id }) => (
-              <MenuItem key={id}>
-                <Link
-                  to={path}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    textDecoration: 'none',
-                    color: '#197BBD',
-                  }}
-                >
-                  <ListItemIcon sx={{ mr: 1 }}>{icon}</ListItemIcon>
-                  {name}
-                </Link>
-              </MenuItem>
-            ))}
-            <MenuItem
-              key='5'
-              onClick={ async() => {
-                await logoutAndRedirect();
-              }
-            }
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                textDecoration: 'none',
-                color: '#197BBD',
+      {user && (
+        <AppBar position="sticky" open={open}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: '36px',
+                ...(open && { display: 'none' }),
               }}
             >
-              <ListItemIcon sx={{ mr: 1 }}>
-                <LogoutIcon fontSize="medium" sx={{ fill: '#FF7F50' }} />
-              </ListItemIcon>
-              Logout
-            </MenuItem>
-          </MenuList>
-          <Divider />
-        </Drawer>
-        <Box component="main" sx={{ flexGrow: 1 }}>
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div">
+              {pageName}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      )}
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        {user && (
+          <Drawer variant="permanent" open={open}>
+            <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'rtl' ? (
+                  <ChevronRightIcon />
+                ) : (
+                  <ChevronLeftIcon />
+                )}
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <MenuList
+              sx={{ py: 1, display: 'flex', flexFlow: 'column nowrap', gap: 2 }}
+            >
+              {routes.map(({ path, name, icon, id }) => (
+                <MenuItem key={id}>
+                  <Link
+                    to={path}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      textDecoration: 'none',
+                      color: '#197BBD',
+                    }}
+                  >
+                    <ListItemIcon sx={{ mr: 1 }}>{icon}</ListItemIcon>
+                    {name}
+                  </Link>
+                </MenuItem>
+              ))}
+              <MenuItem
+                key="5"
+                onClick={async () => {
+                  await logoutAndRedirect();
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  textDecoration: 'none',
+                  color: '#197BBD',
+                }}
+              >
+                <ListItemIcon sx={{ mr: 1 }}>
+                  <LogoutIcon fontSize="medium" sx={{ fill: '#FF7F50' }} />
+                </ListItemIcon>
+                Logout
+              </MenuItem>
+            </MenuList>
+            <Divider />
+          </Drawer>
+        )}
+        <Box
+          component="main"
+          sx={{
+            width: '100%',
+            flexGrow: 1,
+            transition: theme.transitions.create(['width', 'margin'], {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.leavingScreen,
+            }),
+            ...(open && {
+              width: `calc(100% - ${drawerWidth}px)`,
+              transition: theme.transitions.create(['width', 'margin'], {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
+            }),
+          }}
+        >
           {children}
+          <Copyright />
         </Box>
       </Box>
     </>

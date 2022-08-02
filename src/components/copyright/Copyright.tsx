@@ -4,10 +4,11 @@ import * as React from 'react';
 
 const Copyright = (props: any) => (
   <Typography
-    component="span"
+    component="div"
     variant="body2"
     color="text.secondary"
     align="center"
+    py="1em"
   >
     {'Copyright © '}
     <Link color="inherit" href="https://mui.com/">

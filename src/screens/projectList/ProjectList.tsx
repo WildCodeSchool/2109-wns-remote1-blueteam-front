@@ -11,7 +11,7 @@ type Project = {
 };
 
 const ProjectList = (): ReactJSXElement => {
-  const title = 'Project Details';
+  const title = 'Projects';
   const projects: Project[] = [
     {
       id: 1,

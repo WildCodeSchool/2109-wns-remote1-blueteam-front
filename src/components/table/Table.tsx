@@ -141,7 +141,6 @@ function EnhancedTableHead<DataType>(props: IEnhancedTableHeadProps<DataType>) {
     id: keyof DataType;
     label: keyof DataType;
     numeric: boolean;
-    disablePadding: boolean;
   }
 
   const headCells: readonly HeadCell[] = Object.keys(headTitles).map(
@@ -150,7 +149,6 @@ function EnhancedTableHead<DataType>(props: IEnhancedTableHeadProps<DataType>) {
         id: key as keyof DataType,
         label: key as keyof DataType,
         numeric: headTitles[key as keyof DataType] === 'number',
-        disablePadding: typeof headTitles[key as keyof DataType] !== 'number',
       };
     }
   );
@@ -182,8 +180,8 @@ function EnhancedTableHead<DataType>(props: IEnhancedTableHeadProps<DataType>) {
         {headCells.map((headCell) => (
           <StyledTableCell
             key={headCell.id as React.Key}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            align={headCell.numeric ? 'left' : 'center'}
+            padding="normal"
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <StyledTableSortLabel
@@ -405,7 +403,7 @@ export default function EnhancedTable<DataType extends DataWithId>(
                         id={labelId}
                         scope="row"
                         padding="none"
-                        align={typeof row.id === 'number' ? 'right' : 'left'}
+                        align={typeof row.id === 'number' ? 'right' : 'center'}
                       >
                         {row.id}
                       </StyledTableCell>
@@ -414,7 +412,9 @@ export default function EnhancedTable<DataType extends DataWithId>(
                           return (
                             <StyledTableCell
                               align={
-                                typeof property === 'number' ? 'right' : 'left'
+                                typeof property === 'number'
+                                  ? 'right'
+                                  : 'center'
                               }
                               key={`${row.id}${property}`}
                             >

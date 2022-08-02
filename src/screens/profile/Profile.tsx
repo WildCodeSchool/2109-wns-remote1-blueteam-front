@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,6 +15,7 @@ import { gql, useMutation } from '@apollo/client';
 import { stringToColor, stringAvatar } from '../../services/avatarServices';
 import { IUser, IUserUpdate } from '../../interfaces/users';
 import useUser from '../../hooks/useUser';
+import convertToBase64 from '../../services/convertToBase64';
 
 const theme = createTheme();
 
@@ -24,39 +26,55 @@ const Input = styled('input')({
 const UPDATE_USER = gql`
   mutation UpdateUser($data: UserUpdateInput!, $where: UserWhereUniqueInput!) {
     updateUser(data: $data, where: $where) {
+      id
       avatar
       firstname
       lastname
       job
       email
+      role
     }
   }
 `;
 
 const Profile = (): ReactJSXElement => {
-  const [pictureUrl, setPictureUrl] = useState('');
-
-  const [contextUser, loadingUser] = useUser();
-
+  const [contextUser, setUser] = useUser();
   const [userState, setUserState] = useState(contextUser as Partial<IUser>);
+  useEffect(() => {
+    setUserState(contextUser as Partial<IUser>);
+  }, [contextUser]);
 
+  const navigate = useNavigate();
+  console.log(contextUser);
   const [updateUser, { data, loading, error }] = useMutation<
-    { updatedUser: { _id: string } }, // server answer
+    { updateUser: IUser }, // server answer
     { data: IUserUpdate; where: { id: string } } // data sent to server
-  >(UPDATE_USER);
+  >(UPDATE_USER, {
+    onCompleted(updatedUser) {
+      console.log(updatedUser.updateUser);
+      setUser({ ...updatedUser.updateUser });
+    },
+  });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    const avatarUploadValue = formData.get('avatar');
     const userUpdateInput = {
+      avatar: {
+        set:
+          avatarUploadValue instanceof File && avatarUploadValue.name
+            ? ((await convertToBase64(
+                formData.get('avatar') as File
+              )) as string)
+            : userState.avatar || '',
+      },
       firstname: { set: formData.get('firstName') as string },
       lastname: { set: formData.get('lastName') as string },
       email: { set: formData.get('email') as string },
       job: { set: formData.get('job') as string },
       // password: (data.get('password') as string) || '',
     };
-
-    console.log(userUpdateInput);
 
     if (userState.id) {
       updateUser({
@@ -66,185 +84,182 @@ const Profile = (): ReactJSXElement => {
             id: userState.id,
           },
         },
+      }).catch((e) => {
+        if (e?.message === 'not authenticated') {
+          navigate('/signin');
+        }
       });
-      console.log(contextUser);
     }
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="md">
-        <CssBaseline />
-        <Typography
-          component="h1"
-          variant="h5"
-          sx={{ alignSelf: 'flex-start' }}
-        >
-          Profile :
-        </Typography>
-        <Container
-          maxWidth="xs"
-          sx={{
-            marginTop: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 3 }}
+      <CssBaseline />
+      <Container
+        maxWidth="xs"
+        sx={{
+          marginTop: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
+          <Stack
+            direction="row"
+            alignItems="flex-end"
+            justifyContent="space-evenly"
+            spacing="1em"
           >
-            <Stack
-              direction="row"
-              alignItems="flex-end"
-              justifyContent="space-evenly"
-              spacing="2"
+            <Avatar
+              alt={`${userState.firstname} ${userState.lastname}`}
+              src={userState.avatar || '.'}
+              sx={{
+                width: 100,
+                height: 100,
+                minWidth: 50,
+                minHeight: 50,
+                border: 2,
+                borderColor: '#1565c0',
+                bgcolor: stringToColor(
+                  `${userState.firstname} ${userState.lastname}`
+                ),
+              }}
             >
-              <Avatar
-                alt={`${userState.firstname} ${userState.lastname}`}
-                src={pictureUrl || '.'}
-                sx={{
-                  width: 100,
-                  height: 100,
-                  minWidth: 50,
-                  minHeight: 50,
-                  border: 2,
-                  borderColor: '#1565c0',
-                  bgcolor: stringToColor(
-                    `${userState.firstname} ${userState.lastname}`
-                  ),
-                }}
-              >
-                {stringAvatar(`${userState.firstname} ${userState.lastname}`)}
-              </Avatar>
-              <label htmlFor="contained-button-file">
-                <Input
-                  accept="image/*"
-                  id="contained-button-file"
-                  multiple
-                  type="file"
-                  onChange={(e) => {
-                    const targetFile = e.target.files
-                      ? e.target.files[0]
-                      : false;
-                    if (targetFile) {
-                      setPictureUrl(URL.createObjectURL(targetFile));
+              {userState.avatar
+                ? ''
+                : stringAvatar(`${userState.firstname} ${userState.lastname}`)}
+            </Avatar>
+            <label htmlFor="contained-button-file">
+              <Input
+                type="file"
+                accept="image/*"
+                id="contained-button-file"
+                name="avatar"
+                onChange={async (e) => {
+                  const targetFile = e.target.files ? e.target.files[0] : false;
+                  if (targetFile) {
+                    const base64File = await convertToBase64(targetFile);
+                    if (typeof base64File === 'string') {
+                      const newUserState = {
+                        ...userState,
+                        avatar: base64File,
+                      };
+                      setUserState(newUserState);
+                      // setPictureUrl(URL.createObjectURL(targetFile));
                     }
-                  }}
-                />
-                <Button variant="contained" component="span">
-                  Upload
-                </Button>
-              </label>
-            </Stack>
-            <TextField
-              margin="normal"
-              fullWidth
-              id="firstName"
-              label="Firstname"
-              name="firstName"
-              autoComplete="firstname"
-              value={userState.firstname}
-              placeholder=""
-              onChange={(e) => {
-                const newUserState = {
-                  ...userState,
-                  firstname: e.target.value,
-                };
-                setUserState(newUserState);
-              }}
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              id="lastName"
-              label="Lastname"
-              name="lastName"
-              autoComplete="lastname"
-              value={userState.lastname}
-              placeholder=""
-              onChange={(e) => {
-                const newUserState = {
-                  ...userState,
-                  lastname: e.target.value,
-                };
-                setUserState(newUserState);
-              }}
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              id="job"
-              label="Job"
-              name="job"
-              autoComplete="organization-title"
-              value={userState.job}
-              placeholder=""
-              onChange={(e) => {
-                const newUserState = {
-                  ...userState,
-                  job: e.target.value,
-                };
-                setUserState(newUserState);
-              }}
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              value={userState.email}
-              placeholder=""
-              onChange={(e) => {
-                const newUserState = {
-                  ...userState,
-                  email: e.target.value,
-                };
-                setUserState(newUserState);
-              }}
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              name="current_password"
-              label="Current Password"
-              type="password"
-              id="current_password"
-              autoComplete="current-password"
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              name="new_password"
-              label="New Password"
-              type="password"
-              id="new_password"
-              autoComplete="new-password"
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              name="confirm_password"
-              label="Confirm Password"
-              type="password"
-              id="confirm_password"
-              autoComplete="new-password"
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{ mt: 3, mb: 2, width: 1 }}
-            >
-              Confirm
-            </Button>
-          </Box>
-        </Container>
+                  }
+                }}
+              />
+              <Button variant="contained" component="span">
+                Upload
+              </Button>
+            </label>
+          </Stack>
+          <TextField
+            margin="normal"
+            fullWidth
+            id="firstName"
+            label="Firstname"
+            name="firstName"
+            autoComplete="firstname"
+            value={userState.firstname}
+            placeholder=""
+            onChange={(e) => {
+              const newUserState = {
+                ...userState,
+                firstname: e.target.value,
+              };
+              setUserState(newUserState);
+            }}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            id="lastName"
+            label="Lastname"
+            name="lastName"
+            autoComplete="lastname"
+            value={userState.lastname}
+            placeholder=""
+            onChange={(e) => {
+              const newUserState = {
+                ...userState,
+                lastname: e.target.value,
+              };
+              setUserState(newUserState);
+            }}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            id="job"
+            label="Job"
+            name="job"
+            autoComplete="organization-title"
+            value={userState.job}
+            placeholder=""
+            onChange={(e) => {
+              const newUserState = {
+                ...userState,
+                job: e.target.value,
+              };
+              setUserState(newUserState);
+            }}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            value={userState.email}
+            placeholder=""
+            onChange={(e) => {
+              const newUserState = {
+                ...userState,
+                email: e.target.value,
+              };
+              setUserState(newUserState);
+            }}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            name="current_password"
+            label="Current Password"
+            type="password"
+            id="current_password"
+            autoComplete="current-password"
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            name="new_password"
+            label="New Password"
+            type="password"
+            id="new_password"
+            autoComplete="new-password"
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            name="confirm_password"
+            label="Confirm Password"
+            type="password"
+            id="confirm_password"
+            autoComplete="new-password"
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ mt: 3, mb: 2, width: 1 }}
+          >
+            Confirm
+          </Button>
+        </Box>
       </Container>
     </ThemeProvider>
   );

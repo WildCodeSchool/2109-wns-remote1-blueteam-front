@@ -15,7 +15,7 @@ import Router from './routes/Router';
 import { IUser } from './interfaces/users';
 
 const link = createHttpLink({
-  //uri: 'http://localhost:5050/graphql',
+  // uri: 'http://localhost:5050/graphql',
   uri: process.env.REACT_APP_API_URL || '/graphql',
   credentials: 'include',
 });

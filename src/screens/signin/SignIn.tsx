@@ -14,7 +14,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import logo from '../../assets/images/blue_logo.png';
 import Copyright from '../../components/copyright/Copyright';
 import { IUser, IUserLogin } from '../../interfaces/users';
-import useUser from "../../hooks/useUser";
+import useUser from '../../hooks/useUser';
 
 const theme = createTheme();
 
@@ -22,6 +22,7 @@ const LOGIN = gql`
   query Query($data: LoginInput!) {
     login(data: $data) {
       id
+      avatar
       firstname
       lastname
       email
